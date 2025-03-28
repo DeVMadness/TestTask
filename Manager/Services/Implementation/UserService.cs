@@ -14,7 +14,7 @@ namespace Manager.Services.Implementation
     {
         private readonly IUserRepository _userRepository;
 
-        UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

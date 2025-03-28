@@ -6,12 +6,12 @@ using Model.Models;
 
 namespace TestTaskWinForm
 {
-    public partial class Form1 : Form
+    public partial class ProductView : Form
     {
         private readonly IProductService _productService;
         private int _selectedProductId = -1;
 
-        public Form1(IProductService productService)
+        public ProductView(IProductService productService)
         {
             InitializeComponent();
             _productService = productService;
@@ -26,7 +26,9 @@ namespace TestTaskWinForm
         {
             var products = _productService.GetProducts();
             dataGridViewProducts.DataSource = new BindingSource { DataSource = products };
+            _selectedProductId = -1;
         }
+
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
@@ -100,8 +102,16 @@ namespace TestTaskWinForm
             {
                 var selectedRow = dataGridViewProducts.SelectedRows[0];
                 _selectedProductId = (int)selectedRow.Cells["ProductId"].Value;
-                textBoxName.Text = selectedRow.Cells["Name"].Value.ToString();
-                textBoxPrice.Text = selectedRow.Cells["Price"].Value.ToString();
+
+                if (textBoxName != null && selectedRow.Cells["Name"].Value != null)
+                {
+                    textBoxName.Text = selectedRow.Cells["Name"].Value.ToString();
+                }
+
+                if (textBoxPrice != null && selectedRow.Cells["Price"].Value != null)
+                {
+                    textBoxPrice.Text = selectedRow.Cells["Price"].Value.ToString();
+                }
             }
         }
 

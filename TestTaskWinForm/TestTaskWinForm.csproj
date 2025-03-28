@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\Integration.csproj" />
     <ProjectReference Include="..\Manager\Manager.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 ﻿namespace TestTaskWinForm
 {
-    partial class Form1
+    partial class ProductView
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.TextBox textBoxName;

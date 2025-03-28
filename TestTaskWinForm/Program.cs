@@ -1,7 +1,13 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using TestTaskApp.Extensions;
 using Manager.Services.Abstraction;
+using Provider.Repositories.Abstraction;
+using Provider.Repositories.Implementation;
+using Manager.Services.Implementation;
+using TestTaskWinForm.Extensions;
+using Integration.Service.Abstraction;
+using Integration.Service.Implementation;
+
 
 namespace TestTaskWinForm
 {
@@ -10,20 +16,39 @@ namespace TestTaskWinForm
         [STAThread]
         static void Main()
         {
-            var services = new ServiceCollection();
+            ApplicationConfiguration.Initialize();  
 
-            var connectionString = Environment.GetEnvironmentVariable("TestTaskDb");
+            var connectionString = @Environment.GetEnvironmentVariable("TestTaskDb");
+            ServiceProvider.Instance.Register<IProductRepository>(() => new ProductRepository(connectionString));
+            ServiceProvider.Instance.Register<IProductService>(
+                () => new ProductService(ServiceProvider.Instance.GetService<IProductRepository>())
+            );
+            var productService = ServiceProvider.Instance.GetService<IProductService>();
 
-           
+            ServiceProvider.Instance.Register<IUserRepository>(() => new UserRepository(connectionString));
+            ServiceProvider.Instance.Register<IUserService>(
+                () => new UserService(ServiceProvider.Instance.GetService<IUserRepository>())
+            );
+            var userService = ServiceProvider.Instance.GetService<IUserService>();
 
-            services.SetupDataAccess();
 
-            services.SetupBusinessLogic();
+            HttpClient httpClient = new HttpClient();
 
-            var serviceProvider = services.BuildServiceProvider();
+            ServiceProvider.Instance.Register<ITaxRateService>(
+                () => new TaxRateService()
+            );
+            ServiceProvider.Instance.Register<ITaxRateService>(
+                () => new TaxRateService()
+            );
 
-            ApplicationConfiguration.Initialize();
-            Application.Run(new Form1(serviceProvider.GetRequiredService<IProductService>()));
+            var taxRateService = ServiceProvider.Instance.GetService<ITaxRateService>();
+
+            //Application.Run(new TaxRateView(taxRateService));
+            //Application.Run(new ProductView(productService));
+            //Application.Run(new UserView(userService));
+
+
+
         }
     }
 }

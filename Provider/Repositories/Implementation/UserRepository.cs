@@ -105,7 +105,7 @@ namespace Provider.Repositories.Implementation
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("UpdateUser", connection))
+                using (SqlCommand command = new SqlCommand("UpdateUsers", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@UserID", userID);
